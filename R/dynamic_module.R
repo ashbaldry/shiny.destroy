@@ -1,8 +1,20 @@
 #' Create Dynamic Module
 #'
 #' @import shiny
+#' @rdname destroyableModule
 #' @export
-destroyableModule <- function(id, module, session = getDefaultReactiveDomain()) {
+destroyableModuleUI <- function(id, ui, wrapper = div) {
+  if (inherits(ui, "shiny.tag") && is.null(ui$attribs$id)) {
+    ui$attribs$id <- paste0(id, "_destroy_container")
+    ui
+  } else if (inherits(ui, c("shiny.tag.list", "shiny.tag"))) {
+    wrapper(id = paste0(id, "_destroy_container"), ui)
+  }
+}
+
+#' @rdname destroyableModule
+#' @export
+destroyableModuleServer <- function(id, module, session = getDefaultReactiveDomain()) {
   module <- addDestroyers(id, module, session)
   shiny::moduleServer(id, module, session)
 }
@@ -12,7 +24,7 @@ addDestroyers <- function(id, module, session = getDefaultReactiveDomain()) {
 
   module_body <- rlang::fn_body(module)
   module_body <- as.list(module_body)
-  module_body <- purrr:::imap(module_body, assignObserve, id = id)
+  module_body <- purrr::imap(module_body, assignObserve, id = id)
 
   module_body <- append(module_body, createCheckDestroyInit(id), 1L)
 

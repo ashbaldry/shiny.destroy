@@ -1,12 +1,15 @@
 test_that("Module can be destroyed within an application", {
   ui <- fluidPage(
-    actionButton("test-click", "Click Button"),
+    destroyableModuleUI(
+      id = "test",
+      actionButton("test-click", "Click Button")
+    ),
     actionButton("destroy", "Destroy module"),
     textOutput("reactive_value")
   )
 
   basicModule <- function(id) {
-    destroyableModule(id, function(input, output, session) {
+    destroyableModuleServer(id, function(input, output, session) {
       rv <- reactiveVal(0L)
       observeEvent(input$click, rv(rv() + 1L))
       rv
@@ -32,6 +35,6 @@ test_that("Module can be destroyed within an application", {
   expect_identical(app$get_value(output = "reactive_value"), "1")
 
   app$click(input = "destroy")
-  app$click(input = "test-click")
+  expect_error(app$click(input = "test-click"))
   expect_identical(app$get_value(output = "reactive_value"), "1")
 })

@@ -6,7 +6,7 @@ test_that("addDestroyers adds each observer to the session userData", {
     invisible(NULL)
   }
 
-  destroy_call <- addDestroyers("test", basic_call)
+  destroy_call <- addDestroyers("test", basic_call, session = MockShinySession$new())
 })
 
 test_that("addDestroyers adds each observer to the session userData", {
@@ -24,5 +24,5 @@ test_that("addDestroyers adds each observer to the session userData", {
     invisible(NULL)
   }
 
-  destroy_call <- addDestroyers("test", basic_call)
+  destroy_call <- addDestroyers("test", basic_call, session = MockShinySession$new())
 })
