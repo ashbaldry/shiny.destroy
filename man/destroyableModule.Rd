@@ -2,12 +2,12 @@
 % Please edit documentation in R/dynamic_module.R
 \name{destroyableModuleUI}
 \alias{destroyableModuleUI}
-\alias{destroyableModuleServer}
+\alias{makeModuleServerDestroyable}
 \title{Create Dynamic Module}
 \usage{
 destroyableModuleUI(id, ui, wrapper = div)
 
-destroyableModuleServer(id, module, session = getDefaultReactiveDomain())
+makeModuleServerDestroyable(module)
 }
 \description{
 Create Dynamic Module
