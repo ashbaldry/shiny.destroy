@@ -12,7 +12,7 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
   input <- session$input
 
   removeUI(selector = paste0("#", ns_id, "_destroy_container"), immediate = TRUE)
-  purrr::walk(names(input), ~ if (startsWith(.x, ns_id)) destroyInput(input, .x))
+  purrr::walk(names(input), \(x) if (startsWith(x, ns_id)) destroyInput(input, x))
 
   invisible(NULL)
 }
@@ -27,7 +27,7 @@ destroyModuleServer <- function(id, session = getDefaultReactiveDomain()) {
   contains_id <- startsWith(names(observers), ns_id)
 
   observers <- unlist(observers[contains_id], recursive = FALSE)
-  purrr::walk(observers, ~.x$destroy())
+  purrr::walk(observers, \(x) x$destroy())
 
   session$userData$.shiny.destroy <- session$userData$.shiny.destroy[!contains_id]
 
