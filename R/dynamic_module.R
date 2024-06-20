@@ -1,14 +1,70 @@
-#' Create Dynamic Module
+#' Create Destroyable Module
 #'
-#' @import shiny
+#' @description
+#' A short description...
+#'
+#' @param module_fn The server-side part of the module
+#' @param wrapper If the module is a `shiny.tag.list`, then an HTML tag
+#' will be wrapped by an HTML tag so that a shiny.destroy attribute
+#' can be attached
+#'
+#' @examples
+#' library(shiny)
+#'
+#' # UI
+#' basicModuleUI <- function(id) {
+#'   ns <- NS(id)
+#'   actionButton("click")
+#' }
+#'
+#' makeModuleUIDestroyable(basicModuleUI)
+#'
+#' # Server-side
+#' basicMoudleServer <- function(id) {
+#'   moduleServer(id, function(input, output, session) {
+#'     rv <- reactiveVal()
+#'     observeEvent(input$click, rv(input$click))
+#'   })
+#' }
+#'
+#' makeModuleServerDestroyable(basicMoudleServer)
+#'
+#' # Shiny Application
+#' ui <- fluidPage(
+#'   destroyableModuleUI(id = "test"),
+#'   actionButton("destroy", "Destroy module"),
+#'   textOutput("reactive_value")
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   top_rv <- reactiveVal()
+#'
+#'   reactive_value <- destroyableModuleServer("test")
+#'   observeEvent(reactive_value(), top_rv(reactive_value()))
+#'
+#'   output$reactive_value <- renderText(top_rv())
+#'
+#'   observeEvent(input$destroy, destroyModule("test"))
+#' }
+#'
 #' @rdname destroyableModule
 #' @export
-destroyableModuleUI <- function(id, ui, wrapper = div) {
-  if (inherits(ui, "shiny.tag") && is.null(ui$attribs$id)) {
-    ui$attribs$id <- paste0(id, "_destroy_container")
-    ui
-  } else if (inherits(ui, c("shiny.tag.list", "shiny.tag"))) {
-    wrapper(id = paste0(id, "_destroy_container"), ui)
+makeModuleUIDestroyable <- function(module_fn, wrapper = shiny::div) {
+  stopifnot(
+    "`module_fn` is not a function" = is.function(module_fn),
+    "`id` argument must be present in function arguments" = "id" %in% rlang::fn_fmls_names(module_fn)
+  )
+
+  function(id, ...) {
+    ui <- module_fn(id, ...)
+    if (inherits(ui, "shiny.tag")) {
+      ui$attribs[["shiny-destroy"]] <- id
+      ui
+    } else if (inherits(ui, "shiny.tag.list")) {
+      wrapper("shiny-destroy" = id, ui)
+    }  else {
+      stop("Module UI must either be a shiny.tag or a shiny.tag.list")
+    }
   }
 }
 
@@ -33,26 +89,27 @@ makeModuleServerDestroyable <- function(module_fn) {
 }
 
 addModuleDestroyers <- function(module) {
-  module_args <- module |> rlang::call_match(fn = moduleServer) |> rlang::call_args()
+  module_args <- module |> rlang::call_match(fn = shiny::moduleServer) |> rlang::call_args()
 
-  args_w_destroyers <- purrr::modify_if(
-    module_args,
-    "module",
-    addDestroyers
-  )
+  args_w_destroyers <- purrr::modify_at(module_args, "module", addDestroyers)
 
   module_w_destroyers <- rlang::call2(rlang::call_name(module), !!!args_w_destroyers)
   invisible(module_w_destroyers)
 }
 
 addDestroyers <- function(module) {
-  module_body <- module |> rlang::() |> as.list()
+  module_body <- module[[3L]] |>
+    as.list() |>
+    purrr::imap(assignObserve) |>
+    append(INITIAL_DESTROYERS, after = 1L)
 
+  module[[3L]] <- as.call(module_body)
+  module
 }
 
 assignObserve <- function(fn_call, idx) {
   if (isObserver(fn_call)) {
-    assign_val <- str2lang(paste0("session$userData$.shiny.destroy[[session$ns(NULL)]][[\"obs_", idx, "\"]]"))
+    assign_val <- str2lang(paste0(".shiny.destroyers[[\"obs_", idx, "\"]]"))
     rlang::call2("<-", assign_val, fn_call)
   } else {
     fn_call
@@ -71,11 +128,9 @@ isObserver <- function(fn_call) isSpecifiedFunction(fn_call, OBSERVE_FNS)
 
 MODULE_FNS <- "moduleServer"
 OBSERVE_FNS <- c("observe", "observeEvent")
-ASSIGN_FNS <- c("<-", "<<-")
+ASSIGN_FNS <- c("<-", "<<-", "assign")
 
-createCheckDestroyInit <- function() {
-  list(
-    str2lang("if (!\".shiny.destroy\" %in% names(session$userData)) { session$userData$.shiny.destroy <- list() }"),
-    str2lang(paste0("session$userData$.shiny.destroy[[session$ns(NULL)]] <- list()"))
-  )
-}
+INITIAL_DESTROYERS <- list(
+  quote(if (!".shiny.destroy" %in% names(session$userData)) { session$userData$.shiny.destroy <- list() }),
+  quote(.shiny.destroyers <- session$userData$.shiny.destroy[[session$ns(NULL)]] <- list())
+)

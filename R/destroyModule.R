@@ -11,7 +11,7 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
   ns_id <- session$ns(id)
   input <- session$input
 
-  removeUI(selector = paste0("#", ns_id, "_destroy_container"), immediate = TRUE)
+  removeUI(selector = paste0("[shiny-destroy=\"", id, "\"]"), immediate = TRUE)
   purrr::walk(names(input), \(x) if (startsWith(x, ns_id)) destroyInput(input, x))
 
   invisible(NULL)
