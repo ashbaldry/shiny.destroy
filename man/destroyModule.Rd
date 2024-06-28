@@ -6,6 +6,11 @@
 \usage{
 destroyModule(id, session = getDefaultReactiveDomain())
 }
+\arguments{
+\item{id}{The module namespace ID}
+
+\item{session}{}
+}
 \description{
-Destroy Shiny Module
+Given the namespace
 }

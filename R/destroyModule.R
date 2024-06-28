@@ -1,4 +1,11 @@
 #' Destroy Shiny Module
+#'
+#' @description
+#' Given the namespace
+#'
+#' @param id The module namespace ID
+#' @param session
+#'
 #' @export
 destroyModule <- function(id, session = getDefaultReactiveDomain()) {
   destroyModuleUI(id, session = session)
