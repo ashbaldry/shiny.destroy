@@ -18,7 +18,7 @@ test_that("Able to assign observeEvent to shiny destroyers list", {
 
 test_that("Ignores non-observe calls", {
   react_call <- str2lang("x <- reactive(input$click)")
-  assigned_react_call <- assignObserve(obs_call, idx = 1L)
+  assigned_react_call <- assignObserve(react_call, idx = 1L)
 
   expect_identical(assigned_react_call, react_call)
 })

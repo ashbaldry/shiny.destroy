@@ -9,7 +9,7 @@ destroyModule(id, session = getDefaultReactiveDomain())
 \arguments{
 \item{id}{The module namespace ID}
 
-\item{session}{}
+\item{session}{The shiny session, by default it is `shiny::getDefaultReactiveDomain()`}
 }
 \description{
 Given the namespace

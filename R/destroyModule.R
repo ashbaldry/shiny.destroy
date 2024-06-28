@@ -4,7 +4,7 @@
 #' Given the namespace
 #'
 #' @param id The module namespace ID
-#' @param session
+#' @param session The shiny session, by default it is `shiny::getDefaultReactiveDomain()`
 #'
 #' @export
 destroyModule <- function(id, session = getDefaultReactiveDomain()) {

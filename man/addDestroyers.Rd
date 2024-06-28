@@ -10,11 +10,11 @@ addDestroyers(module)
 \item{module}{The function call to `moduleServer`}
 }
 \value{
-An updated version of `module`, where the `{shiny.destroy}`
+An updated version of `module`, where the \{shiny.destroy\}
 code has been added.
 }
 \description{
-For a given `moduleServer` call, add the code required for `{shiny.destroy}`
+For a given `moduleServer` call, add the code required for \{shiny.destroy\}
 to work. This will involve creating the observer list to the user session,
 and adds all observers within the list.
 }

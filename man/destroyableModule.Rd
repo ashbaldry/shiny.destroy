@@ -25,10 +25,10 @@ library(shiny)
 # UI
 basicModuleUI <- function(id) {
   ns <- NS(id)
-  actionButton("click")
+  actionButton("click", "Increase")
 }
 
-makeModuleUIDestroyable(basicModuleUI)
+destroyableModuleUI <- makeModuleUIDestroyable(basicModuleUI)
 
 # Server-side
 basicMoudleServer <- function(id) {
@@ -38,7 +38,7 @@ basicMoudleServer <- function(id) {
   })
 }
 
-makeModuleServerDestroyable(basicMoudleServer)
+destroyableModuleServer <- makeModuleServerDestroyable(basicMoudleServer)
 
 # Shiny Application
 ui <- fluidPage(

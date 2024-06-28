@@ -14,10 +14,10 @@
 #' # UI
 #' basicModuleUI <- function(id) {
 #'   ns <- NS(id)
-#'   actionButton("click")
+#'   actionButton("click", "Increase")
 #' }
 #'
-#' makeModuleUIDestroyable(basicModuleUI)
+#' destroyableModuleUI <- makeModuleUIDestroyable(basicModuleUI)
 #'
 #' # Server-side
 #' basicMoudleServer <- function(id) {
@@ -27,7 +27,7 @@
 #'   })
 #' }
 #'
-#' makeModuleServerDestroyable(basicMoudleServer)
+#' destroyableModuleServer <- makeModuleServerDestroyable(basicMoudleServer)
 #'
 #' # Shiny Application
 #' ui <- fluidPage(
@@ -100,14 +100,14 @@ addModuleDestroyers <- function(module) {
 #' Add shiny.destroy Code to Module
 #'
 #' @description
-#' For a given `moduleServer` call, add the code required for `{shiny.destroy}`
+#' For a given `moduleServer` call, add the code required for \{shiny.destroy\}
 #' to work. This will involve creating the observer list to the user session,
 #' and adds all observers within the list.
 #'
 #' @param module The function call to `moduleServer`
 #'
 #' @return
-#' An updated version of `module`, where the `{shiny.destroy}`
+#' An updated version of `module`, where the \{shiny.destroy\}
 #' code has been added.
 addDestroyers <- function(module) {
   module_body <- module[[3L]] |>
