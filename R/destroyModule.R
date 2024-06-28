@@ -1,4 +1,11 @@
 #' Destroy Shiny Module
+#'
+#' @description
+#' Given the namespace
+#'
+#' @param id The module namespace ID
+#' @param session The shiny session, by default it is `shiny::getDefaultReactiveDomain()`
+#'
 #' @export
 destroyModule <- function(id, session = getDefaultReactiveDomain()) {
   destroyModuleUI(id, session = session)
@@ -11,8 +18,8 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
   ns_id <- session$ns(id)
   input <- session$input
 
-  removeUI(selector = paste0("#", ns_id, "_destroy_container"), immediate = TRUE)
-  purrr::walk(names(input), ~ if (startsWith(.x, ns_id)) destroyInput(input, .x))
+  removeUI(selector = paste0("[shiny-destroy=\"", id, "\"]"), immediate = TRUE)
+  purrr::walk(names(input), \(x) if (startsWith(x, ns_id)) destroyInput(input, x))
 
   invisible(NULL)
 }
@@ -27,7 +34,7 @@ destroyModuleServer <- function(id, session = getDefaultReactiveDomain()) {
   contains_id <- startsWith(names(observers), ns_id)
 
   observers <- unlist(observers[contains_id], recursive = FALSE)
-  purrr::walk(observers, ~.x$destroy())
+  purrr::walk(observers, \(x) x$destroy())
 
   session$userData$.shiny.destroy <- session$userData$.shiny.destroy[!contains_id]
 
