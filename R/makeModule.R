@@ -103,6 +103,16 @@ addDestroyers <- function(module) {
     purrr::imap(assignObserve) |>
     append(INITIAL_DESTROYERS, after = 1L)
 
+  if (isObserver(module_body[[length(module_body)]])) {
+    module_body <- append(
+      module_body,
+      c(TERMINAL_DESTROYERS, module_body[[length(module_body)]][[2L]]),
+      length(module_body)
+    )
+  } else {
+    module_body <- append(module_body, TERMINAL_DESTROYERS, length(module_body) - 1L)
+  }
+
   module[[3L]] <- as.call(module_body)
   module
 }
@@ -132,5 +142,9 @@ ASSIGN_FNS <- c("<-", "<<-", "assign")
 
 INITIAL_DESTROYERS <- list(
   quote(if (!".shiny.destroy" %in% names(session$userData)) { session$userData$.shiny.destroy <- list() }),
-  quote(.shiny.destroyers <- session$userData$.shiny.destroy[[session$ns(NULL)]] <- list())
+  quote(.shiny.destroyers <- list())
+)
+
+TERMINAL_DESTROYERS <- list(
+  quote(session$userData$.shiny.destroy[[session$ns(NULL)]] <- .shiny.destroyers)
 )
