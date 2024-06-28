@@ -97,6 +97,18 @@ addModuleDestroyers <- function(module) {
   invisible(module_w_destroyers)
 }
 
+#' Add shiny.destroy Code to Module
+#'
+#' @description
+#' For a given `moduleServer` call, add the code required for `{shiny.destroy}`
+#' to work. This will involve creating the observer list to the user session,
+#' and adds all observers within the list.
+#'
+#' @param module The function call to `moduleServer`
+#'
+#' @return
+#' An updated version of `module`, where the `{shiny.destroy}`
+#' code has been added.
 addDestroyers <- function(module) {
   module_body <- module[[3L]] |>
     as.list() |>
@@ -117,29 +129,6 @@ addDestroyers <- function(module) {
   module
 }
 
-assignObserve <- function(fn_call, idx) {
-  if (isObserver(fn_call)) {
-    assign_val <- str2lang(paste0(".shiny.destroyers[[\"obs_", idx, "\"]]"))
-    rlang::call2("<-", assign_val, fn_call)
-  } else {
-    fn_call
-  }
-}
-
-isSpecifiedFunction <- function(fn_call, fns) {
-  if (!is.language(fn_call) || is.symbol(fn_call)) return(FALSE)
-
-  fn_name <- rlang::call_name(fn_call)
-  fn_name %in% fns || (fn_name %in% ASSIGN_FNS && rlang::call_name(fn_call[[3L]]) %in% fns)
-}
-
-isModuleServerCall <- function(fn_call) isSpecifiedFunction(fn_call, MODULE_FNS)
-isObserver <- function(fn_call) isSpecifiedFunction(fn_call, OBSERVE_FNS)
-
-MODULE_FNS <- "moduleServer"
-OBSERVE_FNS <- c("observe", "observeEvent")
-ASSIGN_FNS <- c("<-", "<<-", "assign")
-
 INITIAL_DESTROYERS <- list(
   quote(if (!".shiny.destroy" %in% names(session$userData)) { session$userData$.shiny.destroy <- list() }),
   quote(.shiny.destroyers <- list())
@@ -148,3 +137,53 @@ INITIAL_DESTROYERS <- list(
 TERMINAL_DESTROYERS <- list(
   quote(session$userData$.shiny.destroy[[session$ns(NULL)]] <- .shiny.destroyers)
 )
+
+#' Assign Observer Output
+#'
+#' @description
+#' For `observe` and `observeEvent`, create an assignment
+#' to use
+#'
+#' @param fn_call A function call
+#' @param idx A number that will give a unique item in the captured observer list
+#'
+#' @noRd
+assignObserve <- function(fn_call, idx) {
+  stopifnot(
+    "Index must be a numeric value" = is.numeric(idx),
+    "Index must be of length one" = length(idx) == 1L
+  )
+
+  if (isObserver(fn_call)) {
+    assign_val <- str2lang(paste0(".shiny.destroyers[[\"obs_", idx, "\"]]"))
+    rlang::call2("<-", assign_val, fn_call)
+  } else {
+    fn_call
+  }
+}
+
+#' Check if call is for `moduleServer`
+#' @noRd
+isModuleServerCall <- function(fn_call) isSpecifiedFunction(fn_call, "moduleServer")
+
+#' Check if call is for `observe` or `observeEvent`
+#' @noRd
+isObserver <- function(fn_call) isSpecifiedFunction(fn_call, c("observe", "observeEvent"))
+
+#' Check if Function Call is relevant function
+#'
+#' @description
+#' A short description...
+#'
+#' @param fn_call A function call
+#' @param fns A character vector of functions to comapre the function call against
+#'
+#' @return
+#' A logical value stating whether or not the function call is in the collection.
+isSpecifiedFunction <- function(fn_call, fns) {
+  if (!is.language(fn_call) || is.symbol(fn_call)) return(FALSE)
+
+  fn_name <- rlang::call_name(fn_call)
+  fn_name %in% fns || (fn_name %in% ASSIGN_FNS && rlang::call_name(fn_call[[3L]]) %in% fns)
+}
+ASSIGN_FNS <- c("<-", "<<-", "assign")
