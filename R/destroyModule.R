@@ -7,8 +7,8 @@
 #' @param session The shiny session, by default it is `shiny::getDefaultReactiveDomain()`
 #'
 #' @export
-destroyModule <- function(id, session = getDefaultReactiveDomain()) {
-  destroyModuleUI(id, session = session)
+destroyModule <- function(id = NULL, session = getDefaultReactiveDomain()) {
+  destroyModuleUI(id, session = session, input = input)
   destroyModuleServer(id, session = session)
 
   invisible(NULL)
@@ -16,10 +16,14 @@ destroyModule <- function(id, session = getDefaultReactiveDomain()) {
 
 destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
   ns_id <- session$ns(id)
-  input <- session$input
 
-  removeUI(selector = paste0("[shiny-destroy=\"", id, "\"]"), immediate = TRUE)
-  purrr::walk(names(input), \(x) if (startsWith(x, ns_id)) destroyInput(input, x))
+  removeUI(selector = paste0("[shiny-destroy=\"", ns_id, "\"]"), immediate = TRUE)
+
+  if (is.null(id)) {
+    purrr::walk(names(input), \(x) destroyInput(input, session$ns(x)))
+  } else {
+    purrr::walk(names(input), \(x) if (startsWith(x, ns_id)) destroyInput(input, x))
+  }
 
   invisible(NULL)
 }

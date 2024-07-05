@@ -17,6 +17,4 @@ remotes::install_github("ashbaldry/shiny.destroy")
 
 ## Usage
 
-```r
-
-```
+The code for this example is available in the [example vignette](/vignettes/example.Rmd)

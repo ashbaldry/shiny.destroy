@@ -1,10 +1,11 @@
 #' Create Destroyable Module
 #'
 #' @description
-#' A short description...
+#' Adding wrappers to a shiny module to enable an ease of dynamically
+#' adding and removing modules within a shiny application.
 #'
 #' @param module_fn The server-side part of the module
-#' @param wrapper If the module is a `shiny.tag.list`, then an HTML tag
+#' @param wrapper If the module is a `shiny::tagList()`, then an HTML tag
 #' will be wrapped by an HTML tag so that a shiny.destroy attribute
 #' can be attached
 #'

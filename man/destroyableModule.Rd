@@ -12,12 +12,13 @@ makeModuleServerDestroyable(module_fn)
 \arguments{
 \item{module_fn}{The server-side part of the module}
 
-\item{wrapper}{If the module is a `shiny.tag.list`, then an HTML tag
+\item{wrapper}{If the module is a `shiny::tagList()`, then an HTML tag
 will be wrapped by an HTML tag so that a shiny.destroy attribute
 can be attached}
 }
 \description{
-A short description...
+Adding wrappers to a shiny module to enable an ease of dynamically
+adding and removing modules within a shiny application.
 }
 \examples{
 library(shiny)
