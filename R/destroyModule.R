@@ -8,7 +8,7 @@
 #'
 #' @export
 destroyModule <- function(id = NULL, session = getDefaultReactiveDomain()) {
-  destroyModuleUI(id, session = session, input = input)
+  destroyModuleUI(id, session = session)
   destroyModuleServer(id, session = session)
 
   invisible(NULL)
@@ -19,6 +19,7 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
 
   removeUI(selector = paste0("[shiny-destroy=\"", ns_id, "\"]"), immediate = TRUE)
 
+  input <- session$input
   if (is.null(id)) {
     purrr::walk(names(input), \(x) destroyInput(input, session$ns(x)))
   } else {
@@ -30,6 +31,9 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
 
 destroyInput <- function(input, id) {
   .subset2(input, "impl")$.values$remove(id)
+
+  input_obj <- .subset2(input, "impl")
+  input_obj$.nameOrder <- setdiff(input_obj$.nameOrder, id)
 }
 
 destroyModuleServer <- function(id, session = getDefaultReactiveDomain()) {
