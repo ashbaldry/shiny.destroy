@@ -1,11 +1,9 @@
 Package: shiny.destroy
 Type: Package
-Title: Use dynamic, destroyable modules in 'Shiny'
+Title: Create destroyable modules in 'Shiny'
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: person("Ashley", "Baldry", email = "arbaldry91@gmail.com", role = c("aut", "cre"))
+Description: A way to fully remove dynamic 'Shiny' modules from a session.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -13,7 +11,8 @@ Imports:
     purrr,
     rlang,
     shiny
-Suggests: 
+Suggests:
+    bslib,
     knitr,
     rmarkdown,
     shinytest2,

@@ -20,20 +20,23 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
   removeUI(selector = paste0("[shiny-destroy=\"", ns_id, "\"]"), immediate = TRUE)
 
   input <- session$input
+  input_obj <- .subset2(input, "impl")
+
   if (is.null(id)) {
-    purrr::walk(names(input), \(x) destroyInput(input, session$ns(x)))
+    purrr::walk(names(input), \(x) destroyInput(input_obj, session$ns(x)))
   } else {
-    purrr::walk(names(input), \(x) if (startsWith(x, ns_id)) destroyInput(input, x))
+    purrr::walk(names(input), \(x) if (startsWith(x, ns_id)) destroyInput(input_obj, x))
   }
+
+  input_obj$.namesDeps$invalidate()
+  input_obj$.valuesDeps$invalidate()
 
   invisible(NULL)
 }
 
 destroyInput <- function(input, id) {
-  .subset2(input, "impl")$.values$remove(id)
-
-  input_obj <- .subset2(input, "impl")
-  input_obj$.nameOrder <- setdiff(input_obj$.nameOrder, id)
+  input$.values$remove(id)
+  input$.nameOrder <- setdiff(input$.nameOrder, id)
 }
 
 destroyModuleServer <- function(id, session = getDefaultReactiveDomain()) {

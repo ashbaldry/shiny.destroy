@@ -26,6 +26,7 @@ boxModuleUI <- function(id) {
 
   bslib::card(
     id = ns("card"),
+    h3("Box for", sub("_", " ", id)),
     actionButton(ns("destroy"), "Remove card")
   )
 }
@@ -43,7 +44,14 @@ ui <- bslib::page_fluid(
   h1("Destroyable Modules"),
   p("Number of boxes:", textOutput("n_modules", inline = TRUE)),
   actionButton("create", "Create new module"),
-  bslib::layout_columns(id = "cards")
+  bslib::layout_columns(
+    div(id = "cards"),
+    div(
+      h2("Inputs"),
+      verbatimTextOutput("inputs")
+    ),
+    col_widths = c(8, 4)
+  )
 )
 
 server <- function(input, output, session) {
@@ -51,7 +59,6 @@ server <- function(input, output, session) {
 
   observeEvent(input$create, {
     ns_id <- paste0("card_", card_id())
-
     insertUI("#cards", "beforeEnd", destroyableBoxModuleUI(id = ns_id))
     destroyableBoxModuleServer(id = ns_id)
 
@@ -60,6 +67,11 @@ server <- function(input, output, session) {
 
   output$n_modules <- renderText({
     sum(grepl("destroy", names(input)))
+  })
+
+  output$inputs <- renderPrint({
+    inputs <- vapply(names(input), \(x) paste0(x, ": ", input[[x]]), character(1L))
+    cat(inputs, sep = "\n")
   })
 }
 
