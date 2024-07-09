@@ -4,8 +4,13 @@
 \alias{destroyModule}
 \title{Destroy Shiny Module}
 \usage{
-destroyModule(id, session = getDefaultReactiveDomain())
+destroyModule(id = NULL, session = getDefaultReactiveDomain())
+}
+\arguments{
+\item{id}{The module namespace ID}
+
+\item{session}{The shiny session, by default it is `shiny::getDefaultReactiveDomain()`}
 }
 \description{
-Destroy Shiny Module
+Given the namespace
 }
