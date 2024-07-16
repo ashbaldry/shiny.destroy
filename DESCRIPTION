@@ -13,6 +13,7 @@ Imports:
     shiny
 Suggests:
     bslib,
+    htmltools,
     knitr,
     rmarkdown,
     shinytest2,
