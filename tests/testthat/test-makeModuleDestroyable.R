@@ -43,6 +43,17 @@ test_that("Server enabler errors when the module_fn is not a function call", {
   )
 })
 
+test_that("Server enabler errors when the module_fn does not contain a moduleServer call", {
+  basicFunction <- function(id) {
+    paste(id, "hello")
+  }
+
+  expect_error(
+    makeModuleServerDestroyable(basicFunction),
+    "There must be a call to shiny::moduleServer in the `module_fn` function"
+  )
+})
+
 test_that("Observers are assigned to userData when server function passed to make destroyable", {
   basicModuleServer <- function(id) {
     moduleServer(id, function(input, output, session) {
