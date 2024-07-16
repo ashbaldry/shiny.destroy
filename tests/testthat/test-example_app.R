@@ -35,6 +35,6 @@ test_that("01_boxes application works as expected", {
   expect_identical(app$get_value(output = "n_modules"), "2")
   expect_match(
     app$get_value(output = "inputs"),
-    "create: 2.*card_2-destroy: 0.*card_3-destroy: 0"
+    "create: 3.*card_2-destroy: 0.*card_3-destroy: 0"
   )
 })
