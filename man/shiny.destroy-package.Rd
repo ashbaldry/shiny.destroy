@@ -4,7 +4,11 @@
 \name{shiny.destroy-package}
 \alias{shiny.destroy}
 \alias{shiny.destroy-package}
-\title{shiny.destroy: Use dynamic, destroyable modules in 'Shiny'}
+\title{shiny.destroy: Create destroyable modules in 'Shiny'}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+A way to fully remove dynamic 'Shiny' modules from a session.
+}
+\author{
+\strong{Maintainer}: Ashley Baldry \email{arbaldry91@gmail.com}
+
 }
