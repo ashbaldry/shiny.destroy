@@ -36,3 +36,20 @@ test_that("addModuleDestroyers makes moduleServer include destroyable observers"
 
   expect_identical(destroy_module$module, destroy_module_body)
 })
+
+test_that("addModuleDestroyers ensures returned object is sustained when final call is observer", {
+  basic_module <- quote(
+    moduleServer(id, function(input, output, session) {
+      x <- reactive("foo")
+      observe("bar")
+    })
+  )
+
+  destroy_module <- addModuleDestroyers(basic_module)
+  destroy_body <- destroy_module$module[[3L]] |> as.list()
+
+  expect_identical(match(INITIAL_DESTROYERS, destroy_body), c(2L, 3L))
+  expect_identical(destroy_body[[5L]], quote(.shiny.destroyers[["obs_3"]] <- observe("bar")))
+  expect_identical(match(TERMINAL_DESTROYERS, destroy_body), 6L)
+  expect_identical(destroy_body[[7L]], quote(.shiny.destroyers[["obs_3"]]))
+})
