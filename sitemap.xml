@@ -1,0 +1,15 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/articles/example.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/addDestroyers.html</loc></url>
+<url><loc>/reference/destroyModule.html</loc></url>
+<url><loc>/reference/destroyableModule.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/isSpecifiedFunction.html</loc></url>
+<url><loc>/reference/shiny.destroy-package.html</loc></url>
+</urlset>
+
