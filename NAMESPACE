@@ -3,4 +3,5 @@
 export(destroyModule)
 export(makeModuleServerDestroyable)
 export(makeModuleUIDestroyable)
+export(runDestroyExample)
 import(shiny)

@@ -17,4 +17,14 @@ remotes::install_github("ashbaldry/shiny.destroy")
 
 ## Usage
 
-The code for this example is available in the [example vignette](/vignettes/example.Rmd)
+
+
+## Example
+
+![Example shiny.destroy application](/man/figures/example_app.gif)
+
+The code for this example is available in the [examples directory](/inst/examples-shiny)
+
+## Limitations
+
+To include sub-modules within the destroyable module, the server-side module will need to be passed through `makeModuleServerDestroyable` and included as an argument to the parent module to ensure those observers are safely removed.
