@@ -1,3 +1,4 @@
+<<<<<<<< HEAD:inst/examples-shiny/01_boxes/app.R
 library(bslib)
 library(shiny)
 library(shiny.destroy)
@@ -57,3 +58,28 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+========
+---
+title: "Example Application"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example Application}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+
+```
+
+```{r, eval = FALSE}
+
+```
+>>>>>>>> origin/main:vignettes/example.Rmd
