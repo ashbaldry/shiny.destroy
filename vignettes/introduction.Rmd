@@ -1,0 +1,21 @@
+---
+title: "Removing Shiny Modules"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Removing Shiny Modules}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In larger shiny applications, modules are beneficial to reduce the application down into smaller, reusable chunks. There are situations where these modules can be dynamically added to the application, but also want to be removed. By using `removeUI`, we can remove the HTML of the module, however there are still a load of server-side processes that will be running even with the module "removed". {shiny.destroy} makes sure that any trace of the module is no longer available within the application.
+
+## UI
+
+## Server

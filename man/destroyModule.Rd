@@ -12,5 +12,46 @@ destroyModule(id = NULL, session = getDefaultReactiveDomain())
 \item{session}{The shiny session, by default it is `shiny::getDefaultReactiveDomain()`}
 }
 \description{
-Given the namespace
+Given the namespace of a shiny module, remove all references
+to the inputs, outputs and observers that are called within
+the module.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(shiny)
+
+basicModuleUI <- function(id) {
+  ns <- NS(id)
+  actionButton(ns("click"), "Click Button")
+}
+
+basicModuleServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    rv <- reactiveVal(0L)
+    observeEvent(input$click, rv(rv() + 1L))
+    rv
+  })
+}
+
+destroyableModuleUI <- makeModuleUIDestroyable(basicModuleUI)
+destroyableModuleServer <- makeModuleServerDestroyable(basicModuleServer)
+
+ui <- fluidPage(
+  destroyableModuleUI(id = "test"),
+  actionButton("destroy", "Destroy module"),
+  textOutput("reactive_value")
+)
+
+server <- function(input, output, session) {
+  top_rv <- reactiveVal()
+  reactive_value <- destroyableModuleServer("test")
+  observeEvent(reactive_value(), top_rv(reactive_value()))
+
+  output$reactive_value <- renderText(top_rv())
+
+  observeEvent(input$destroy, destroyModule("test"))
+}
+
+shinyApp(ui, server)
+\dontshow{\}) # examplesIf}
 }
