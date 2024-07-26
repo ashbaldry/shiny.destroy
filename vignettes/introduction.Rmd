@@ -9,6 +9,7 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
+  eval = FALSE,
   collapse = TRUE,
   comment = "#>"
 )
@@ -18,7 +19,41 @@ In larger shiny applications, modules are beneficial to reduce the application d
 
 ## UI
 
-```r
+```{r basic_ui}
+library(shiny)
+
+ui <- fluidPage(
+  numericInput("number", "Select number:", 5, 1, 10),
+  p("Selected number:", textOutput("number_out", inline = TRUE)),
+  actionButton("delete", "Remove input")
+)
+
+server <- function(input, output, session) {
+  output$number_out <- renderText(input$number)
+  
+  observeEvent(input$delete, removeUI("#number"))
+}
+
+shinyApp(ui, server)
+```
+
+```{r destroy_ui, eval=FALSE}
+library(shiny)
+library(shiny.destroy)
+
+ui <- fluidPage(
+  numericInput("number", "Select number:", 5, 1, 10),
+  p("Selected number:", textOutput("number_out", inline = TRUE)),
+  actionButton("delete", "Remove input")
+)
+
+server <- function(input, output, session) {
+  output$number_out <- renderText(paste("dfs", input$number))
+  
+  observeEvent(input$delete, removeInput("number"))
+}
+
+shinyApp(ui, server)
 ```
 
 ## Server
