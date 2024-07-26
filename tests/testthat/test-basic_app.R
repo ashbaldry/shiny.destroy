@@ -71,7 +71,7 @@ test_that("Input is not passed to module after module is destroyed", {
 
     output$reactive_value <- renderText(top_rv())
 
-    observeEvent(input$destroy, {print(1); destroyModule("test")})
+    observeEvent(input$destroy, destroyModule("test"))
   }
 
   app <- shinytest2::AppDriver$new(shinyApp(ui, server), name = "basic_app")
@@ -88,4 +88,44 @@ test_that("Input is not passed to module after module is destroyed", {
   app$click(input = "click")
   expect_equal(app$get_value(input = "click"), 2L, ignore_attr = TRUE)
   expect_identical(app$get_value(output = "reactive_value"), "1")
+})
+
+test_that("Input within a module is reset after module is destroyed", {
+  basicModuleUI <- function(id) {
+    ns <- NS(id)
+    numericInput(ns("number"), "Choose a number", 5, 1, 10)
+  }
+
+  basicModuleServer <- function(id) {
+    moduleServer(id, function(input, output, session) {
+      reactive(input$number)
+    })
+  }
+
+  destroyableModuleUI <- makeModuleUIDestroyable(basicModuleUI)
+  destroyableModuleServer <- makeModuleServerDestroyable(basicModuleServer)
+
+  ui <- fluidPage(
+    destroyableModuleUI(id = "test"),
+    actionButton("destroy", "Destroy module"),
+    textOutput("module_input")
+  )
+
+  server <- function(input, output, session) {
+    module_input <- destroyableModuleServer("test")
+    output$module_input <- renderText(module_input())
+
+    observeEvent(input$destroy, destroyModule("test"))
+  }
+
+  app <- shinytest2::AppDriver$new(shinyApp(ui, server), name = "basic_app")
+  on.exit(app$stop())
+
+  expect_equal(app$get_value(input = "test-number"), 5L, ignore_attr = TRUE)
+  expect_identical(app$get_value(output = "module_input"), "5")
+
+  app$click(input = "destroy")
+  expect_error(app$click(input = "test-number"))
+  expect_null(app$get_value(input = "test-number"))
+  expect_identical(app$get_value(output = "module_input"), "")
 })

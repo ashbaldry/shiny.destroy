@@ -3,5 +3,6 @@
 export(destroyModule)
 export(makeModuleServerDestroyable)
 export(makeModuleUIDestroyable)
+export(removeInput)
 export(runDestroyExample)
 import(shiny)
