@@ -127,5 +127,5 @@ test_that("Input within a module is reset after module is destroyed", {
   app$click(input = "destroy")
   expect_error(app$click(input = "test-number"))
   expect_null(app$get_value(input = "test-number"))
-  expect_null(app$get_value(output = "module_input"))
+  expect_identical(app$get_value(output = "module_input"), "")
 })
