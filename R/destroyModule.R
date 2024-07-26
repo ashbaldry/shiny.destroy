@@ -65,9 +65,7 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
     if (startsWith(x_id, ns_id)) destroyInput(x_id, session)
   })
 
-  input_obj <- .subset2(input, "impl")
-  input_obj$.namesDeps$invalidate()
-  input_obj$.valuesDeps$invalidate()
+  invalidateInputs(session)
 
   invisible(NULL)
 }
@@ -92,21 +90,6 @@ destroyModuleServer <- function(id, session = getDefaultReactiveDomain()) {
   session$userData$.shiny.destroy <- session$userData$.shiny.destroy[!contains_id]
 
   invisible(NULL)
-}
-
-#' Remove Input from Shiny Session
-#'
-#' The removal of the named input in a shiny session.
-#'
-#' @param id Input value name
-#' @param session The Shiny session to remove the input from
-#'
-#' @noRd
-destroyInput <- function(id, session = getDefaultReactiveDomain()) {
-  input <- .subset2(session$input, "impl")
-
-  input$.values$remove(id)
-  input$.nameOrder <- setdiff(input$.nameOrder, id)
 }
 
 #' Remove Output from Shiny Session

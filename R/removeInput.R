@@ -26,16 +26,26 @@
 #'
 #' shinyApp(ui, server)
 #'
-#'
 #' @export
 removeInput <- function(id, session = getDefaultReactiveDomain()) {
   shiny::removeUI(paste0("#", id), immediate = TRUE, session = session)
 
   destroyInput(id, session = session)
-
-  input_obj <- .subset2(session$input, "impl")
-  input_obj$.namesDeps$invalidate()
-  input_obj$.valuesDeps$invalidate()
+  invalidateInputs(session)
 
   invisible(TRUE)
+}
+
+destroyInput <- function(id, session = getDefaultReactiveDomain()) {
+  input <- .subset2(session$input, "impl")
+
+  input$.values$remove(id)
+  input$.nameOrder <- setdiff(input$.nameOrder, id)
+}
+
+invalidateInputs <- function(session = getDefaultReactiveDomain()) {
+  input <- .subset2(session$input, "impl")
+
+  input$.namesDeps$invalidate()
+  input$.valuesDeps$invalidate()
 }
