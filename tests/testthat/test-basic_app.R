@@ -116,9 +116,6 @@ test_that("Input within a module is reset after module is destroyed", {
     output$module_input <- renderText(module_input())
 
     observeEvent(input$destroy, destroyModule("test"))
-
-    # observe(priority = -1L, browser()) |>
-    #   bindEvent(input$destroy, module_input())
   }
 
   app <- shinytest2::AppDriver$new(shinyApp(ui, server), name = "basic_app")
