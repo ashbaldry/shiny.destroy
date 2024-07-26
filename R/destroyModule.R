@@ -60,7 +60,7 @@ destroyModuleUI <- function(id, session = getDefaultReactiveDomain()) {
   shiny::removeUI(selector = paste0("[shiny-destroy=\"", ns_id, "\"]"), immediate = TRUE)
 
   input <- session$input
-  purrr::walk(names(input), \(x) {
+  purrr::walk(names(input), session = session, \(x, session) {
     x_id <- if (is.null(id)) session$ns(x) else x
     if (startsWith(x_id, ns_id)) destroyInput(x_id, session)
   })
@@ -78,7 +78,7 @@ destroyModuleServer <- function(id, session = getDefaultReactiveDomain()) {
   contains_id <- startsWith(names(observers), ns_id)
 
   output <- session$.__enclos_env__$private$.outputs
-  purrr::walk(names(output), \(x) {
+  purrr::walk(names(output), session = session, \(x, session) {
     x_id <- if (is.null(id)) session$ns(x) else x
     if (startsWith(x_id, ns_id)) destroyOutput(x_id, session)
   })
@@ -102,6 +102,6 @@ destroyModuleServer <- function(id, session = getDefaultReactiveDomain()) {
 #' @noRd
 destroyOutput <- function(id, session = getDefaultReactiveDomain()) {
   session$defineOutput(id, NULL, NULL)
-  session$.__enclos_env__$private$.outputs[[id]] <<- NULL
-  session$.__enclos_env__$private$.outputOptions[[id]] <<- NULL
+  session$.__enclos_env__$private$.outputs[[id]] <- NULL
+  session$.__enclos_env__$private$.outputOptions[[id]] <- NULL
 }
