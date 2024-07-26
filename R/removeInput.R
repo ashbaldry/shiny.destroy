@@ -49,7 +49,7 @@ removeInput <- function(id, selector = paste0("#", id), session = getDefaultReac
 }
 
 destroyInput <- function(id, session = getDefaultReactiveDomain()) {
-  session$manageInputs(stats::setNames(list(NULL), id))
+  session$manageInputs(stats::setNames(list(NULL), id), now = TRUE)
 
   input <- .subset2(session$input, "impl")
 
