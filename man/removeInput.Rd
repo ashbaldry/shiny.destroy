@@ -4,10 +4,18 @@
 \alias{removeInput}
 \title{Remove Input from Shiny Session}
 \usage{
-removeInput(id, session = getDefaultReactiveDomain())
+removeInput(
+  id,
+  selector = paste0("#", id),
+  session = getDefaultReactiveDomain()
+)
 }
 \arguments{
 \item{id}{Input value name}
+
+\item{selector}{The HTML selector to remove the UI for. By default it is the
+tag where the ID matches the input, but might need to be adjusted for
+different inputs.}
 
 \item{session}{The Shiny session to remove the input from}
 }
@@ -16,6 +24,11 @@ An invisible `TRUE` value confirming that the input has been removed.
 }
 \description{
 The removal of the named input in a shiny session.
+}
+\details{
+If the input is a standard `{shiny}` input e.g. `numericInput`, then to
+remove the label as well as the input, set the selector to be
+`paste0(":has(> #", id, ")")`
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -29,9 +42,12 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  output$number_out <- renderText(input$number)
+  output$number_out <- renderText(input$number \%||\% "input unavailable")
 
-  observeEvent(input$delete, removeInput("number"))
+  observeEvent(
+    input$delete,
+    removeInput("number", selector = ":has(> #number)")
+   )
 }
 
 shinyApp(ui, server)

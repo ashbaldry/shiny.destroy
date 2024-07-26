@@ -24,8 +24,8 @@ library(shiny)
 
 ui <- fluidPage(
   numericInput("number", "Select number:", 5, 1, 10),
-  p("Selected number:", textOutput("number_out", inline = TRUE)),
-  actionButton("delete", "Remove input")
+  actionButton("delete", "Remove input"),
+  p("Selected number:", textOutput("number_out", inline = TRUE))
 )
 
 server <- function(input, output, session) {
@@ -43,14 +43,17 @@ library(shiny.destroy)
 
 ui <- fluidPage(
   numericInput("number", "Select number:", 5, 1, 10),
-  p("Selected number:", textOutput("number_out", inline = TRUE)),
-  actionButton("delete", "Remove input")
+  actionButton("delete", "Remove input"),
+  p("Selected number:", textOutput("number_out", inline = TRUE))
 )
 
 server <- function(input, output, session) {
-  output$number_out <- renderText(paste("dfs", input$number))
+  output$number_out <- renderText(input$number %||% "input unavailable")
   
-  observeEvent(input$delete, removeInput("number"))
+  observeEvent(
+    input$delete, 
+    removeInput("number", selector = ":has(> #number)")
+  )
 }
 
 shinyApp(ui, server)
