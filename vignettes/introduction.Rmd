@@ -18,4 +18,7 @@ In larger shiny applications, modules are beneficial to reduce the application d
 
 ## UI
 
+```r
+```
+
 ## Server

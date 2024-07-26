@@ -119,6 +119,6 @@ destroyInput <- function(id, session = getDefaultReactiveDomain()) {
 #' @noRd
 destroyOutput <- function(id, session = getDefaultReactiveDomain()) {
   session$defineOutput(id, NULL, NULL)
-  session$.__enclos_env__$private$.outputs[[id]] <- NULL
-  session$.__enclos_env__$private$.outputOptions[[id]] <- NULL
+  session$.__enclos_env__$private$.outputs[[id]] <<- NULL
+  session$.__enclos_env__$private$.outputOptions[[id]] <<- NULL
 }
