@@ -12,7 +12,7 @@
 #' An invisible `TRUE` value confirming that the input has been removed.
 #'
 #' @details
-#' If the input is a standard `{shiny}` input e.g. `numericInput`, then to
+#' If the input is a standard \{shiny\} input e.g. `numericInput`, then to
 #' remove the label as well as the input, set the selector to be
 #' `paste0(":has(> #", id, ")")`
 #'

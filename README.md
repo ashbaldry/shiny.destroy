@@ -21,7 +21,7 @@ remotes::install_github("ashbaldry/shiny.destroy")
 
 ## Example
 
-![Example shiny.destroy application](/man/figures/example_app.gif)
+![Example shiny.destroy application](./man/figures/example_app.gif)
 
 The code for this example is available in the [examples directory](/inst/examples-shiny)
 
