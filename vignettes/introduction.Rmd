@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 As shiny applications become larger and more complex, there are requirements to dynamically show inputs, results and even entire modules. Functionality exists to be able to dynamically update the UI and server, however when removing the UI, traces of the input are still available throughout the application which may cause some unexpected behaviour. The aim of {shiny.destroy} is to eliminate all traces of the removed UI in the shiny application, providing the assurance that only the required observers and outputs are rendered after removal.
 
-## UI
+## Inputs
 
 The front-end part of shiny inputs can easily be removed by using the `removeUI` function, however this does not impact the server side, where the input is still accessible. 
 
@@ -71,7 +71,7 @@ shinyApp(ui, server)
 
 [Shiny application removing the numeric input with removeInput](./introduction_clips/removeInput.gif)
 
-## Server
+## Output
 
 
 ## Module
@@ -84,3 +84,35 @@ shiny::runExample(
   package = "shiny.destroy"
 )
 ```
+
+### UI
+
+
+
+### Observers
+
+`observe` and `observeEvent` are eager, and execute whenever any of the triggers are updated. If you assign an observer to a variable, you can see that it too is an R6 object with several methods. To prevent an observer from evaluating, you can use the `$destroy()` method.
+
+```{r stop_observer}
+library(shiny)
+
+ui <- fluidPage(
+  actionButton("update", "Increase"),
+  actionButton("stop", "Stop increasing"),
+  p("Updates:", textOutput("number_out", inline = TRUE))
+)
+
+server <- function(input, output, session) {
+  clicks <- reactiveVal(0)
+  
+  update_obs <- observeEvent(input$update, clicks(clicks() + 1))
+  
+  observeEvent(input$stop, update_obs$destroy())
+  
+  output$number_out <- renderText(clicks())
+}
+
+shinyApp(ui, server)
+```
+
+When it comes to modules, these triggers can potentially be inputs or reactive values that are passed into the module. Removing a module from the shiny session won't disable these observers, so in order for `destroyModule` to remove these observers, the module function needs to be passed into `makeModuleServerDestroyable`. This assigns all observers to the user session data so that when the module is destroyed, the observers can be too.
