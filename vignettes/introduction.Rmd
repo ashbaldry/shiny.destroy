@@ -87,7 +87,7 @@ shiny::runExample(
 
 ### UI
 
-
+The UI for a module is removed in the same way the UI is removed for an input. 
 
 ### Observers
 
