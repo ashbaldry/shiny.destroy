@@ -73,6 +73,37 @@ shinyApp(ui, server)
 
 ## Output
 
+Outputs can be removed in shiny applications by using a combination of `removeUI` and assigning `NULL` to the relevant output ID server-side.
+
+```{r destroy_output}
+library(shiny)
+library(shiny.destroy)
+
+ui <- fluidPage(
+  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  actionButton("delete", "Remove output"),
+  plotOutput("distPlot")
+)
+
+server <- function(input, output, session) {
+  output$distPlot <- renderPlot({
+    x <- faithful[, 2]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(
+      x, 
+      breaks = bins, 
+      col = "darkgray", 
+      border = "white",
+      xlab = "Waiting time to next eruption (in mins)",
+      main = "Histogram of waiting times"
+    )
+  })
+  
+  observeEvent(input$delete, removeOutput("distPlot"))
+}
+
+shinyApp(ui, server)
+```
 
 ## Module
 
