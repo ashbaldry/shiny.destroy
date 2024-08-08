@@ -9,4 +9,5 @@
 library(testthat)
 library(shiny.destroy)
 
+logger::log_info("testthat.R called")
 test_check("shiny.destroy")

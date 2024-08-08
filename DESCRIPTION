@@ -15,6 +15,7 @@ Suggests:
     bslib,
     htmltools,
     knitr,
+    logger,
     rmarkdown,
     shinytest2,
     testthat (>= 3.0.0)
