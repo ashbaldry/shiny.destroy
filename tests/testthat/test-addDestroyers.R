@@ -1,3 +1,5 @@
+logger::log_info("Testing addDestroyers")
+
 test_that("addDestroyers adds each observer to the session userData", {
   basic_module <- quote(
     function(input, output, session) {
@@ -14,6 +16,8 @@ test_that("addDestroyers adds each observer to the session userData", {
   expect_identical(destroy_body[[5L]], quote(.shiny.destroyers[["obs_3"]] <- observe("bar")))
   expect_identical(match(TERMINAL_DESTROYERS, destroy_body), 6L)
 })
+
+logger::log_info("Testing addDestroyers 2")
 
 test_that("addModuleDestroyers makes moduleServer include destroyable observers", {
   basic_module <- quote(
@@ -37,6 +41,8 @@ test_that("addModuleDestroyers makes moduleServer include destroyable observers"
   expect_identical(destroy_module$module, destroy_module_body)
 })
 
+logger::log_info("Testing addDestroyers 3")
+
 test_that("addModuleDestroyers ensures returned object is sustained when final call is observer", {
   basic_module <- quote(
     moduleServer(id, function(input, output, session) {
@@ -53,3 +59,5 @@ test_that("addModuleDestroyers ensures returned object is sustained when final c
   expect_identical(match(TERMINAL_DESTROYERS, destroy_body), 6L)
   expect_identical(destroy_body[[7L]], quote(.shiny.destroyers[["obs_3"]]))
 })
+
+logger::log_info("End testing addDestroyers")
