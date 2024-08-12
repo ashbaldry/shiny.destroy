@@ -6,9 +6,11 @@
   
 <!-- badges: end -->
 
-The aim of {shiny.destroy} is to allow dynamic shiny modules to be removed from both the UI and server.
+The aim of {shiny.destroy} is to allow inputs and modules created in a shiny application to be removed without keeping any trace of them within the realm of the shiny application.
 
 ## Installation
+
+Install the latest version of {shiny.destroy} on GitHub
 
 ```r
 require("remotes")
@@ -17,11 +19,19 @@ remotes::install_github("ashbaldry/shiny.destroy")
 
 ## Usage
 
+There are two types of objects that {shiny.destroy} handles: inputs and modules.
 
+### Input
+
+Use the function `removeInput` to remove the desired input. This is a wrapper around `shiny::removeUI`, but includes ways to reference the input server-side, and updates any reactives and/or outputs that depend on that input instantly.
+
+### Module
+
+Prior to the application loading.
 
 ## Example
 
-![Example shiny.destroy application](/man/figures/example_app.gif)
+![Example shiny.destroy application](./man/figures/example_app.gif)
 
 The code for this example is available in the [examples directory](/inst/examples-shiny)
 
