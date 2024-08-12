@@ -39,7 +39,7 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-[Shiny application removing the numeric input with removeUI](./introduction_clips/removeUI.gif)
+![Shiny application removing the numeric input with removeUI](./introduction_clips/removeUI.gif)
 
 With `removeInput`, both the front and back end remove the input, and any observer or output that references the removed input will be updated. Whilst the trick of using `.subset2(input, "impl")$remove(id)` is known to remove the input, it does not trigger anything. Within the `input` object, the names are all stored within the `.namesOrder` and needs to be removed from here too.
 
@@ -69,20 +69,20 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-[Shiny application removing the numeric input with removeInput](./introduction_clips/removeInput.gif)
+![Shiny application removing the numeric input with removeInput](./introduction_clips/removeInput.gif)
 
 ## Output
 
-Outputs can be removed in shiny applications by using a combination of `removeUI` and assigning `NULL` to the relevant output ID server-side.
+Outputs can be removed in shiny applications by using a combination of `removeUI` and assigning `NULL` to the relevant output ID server-side; `removeOutput` is a wrapper for both operations. When assigning the output `NULL`, rather than removing the output entirely, it instead creates a reactive using `req(FALSE)` so that the output will never be updated.
 
 ```{r destroy_output}
 library(shiny)
 library(shiny.destroy)
 
 ui <- fluidPage(
-  sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  numericInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
   actionButton("delete", "Remove output"),
-  plotOutput("distPlot")
+  plotOutput("distPlot", height = "200px", width = "400px")
 )
 
 server <- function(input, output, session) {
@@ -105,9 +105,11 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
+![Shiny application removing the plot output with removeOutput](./introduction_clips/removeOutput.gif)
+
 ## Module
 
-In larger shiny applications, modules are beneficial to reduce the application down into smaller, reusable chunks. There are situations where these modules can be dynamically added to the application, but also want to be removed. By using `removeUI`, we can remove the HTML of the module, however there are still a load of server-side processes that will be running even with the module "removed". {shiny.destroy} makes sure that any trace of the module is no longer available within the application.
+In larger shiny applications, modules are beneficial to reduce the application down into smaller, reusable chunks. There are situations where these modules can be dynamically added to the application, but also want to be removed. By using `removeUI`, we can remove the HTML of the module, however there are still a load of server-side processes that will be running even with the module "removed". {shiny.destroy} makes sure that any trace of the module is no longer available within the application. 
 
 ```{r module_example}
 shiny::runExample(
@@ -116,13 +118,9 @@ shiny::runExample(
 )
 ```
 
-### UI
+<img src="../man/figures/example_app.gif" alt="Shiny application adding and removing box modules with destroyModule" width="100%"/>
 
-The UI for a module is removed in the same way the UI is removed for an input. 
-
-### Observers
-
-`observe` and `observeEvent` are eager, and execute whenever any of the triggers are updated. If you assign an observer to a variable, you can see that it too is an R6 object with several methods. To prevent an observer from evaluating, you can use the `$destroy()` method.
+The inputs and outputs are removed in the same way as an individual input or output, however additional objects in a module need to be addressed to properly destroy the module. `observe` and `observeEvent` are eager, and execute whenever any of the triggers are updated. If you assign an observer to a variable, you can see that it too is an R6 object with several methods. To prevent an observer from evaluating, you can use the `$destroy()` method.
 
 ```{r stop_observer}
 library(shiny)
@@ -146,4 +144,10 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
+![Shiny application stopping the counter observer increase](./introduction_clips/stopObserver.gif)
+
 When it comes to modules, these triggers can potentially be inputs or reactive values that are passed into the module. Removing a module from the shiny session won't disable these observers, so in order for `destroyModule` to remove these observers, the module function needs to be passed into `makeModuleServerDestroyable`. This assigns all observers to the user session data so that when the module is destroyed, the observers can be too.
+
+### Sub-Modules
+
+Whilst the module code can be updated so that the observers can be destroyed with a single click, it is hard to find sub-modules called within the module code. Therefore these should be included as arguments to the server-side module, using `makeModuleServerDestroyable`, so that these observers will be destroyed too.
