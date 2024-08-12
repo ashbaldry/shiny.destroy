@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Removing Shiny Modules • shiny.destroy</title>
+<title>Removing Shiny Objects • shiny.destroy</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Removing Shiny Modules">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Removing Shiny Objects">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -49,7 +49,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/introduction.html">Removing Shiny Modules</a>
+      <a href="../articles/introduction.html">Removing Shiny Objects</a>
     </li>
   </ul>
 </li>
@@ -67,7 +67,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Removing Shiny Modules</h1>
+      <h1 data-toc-skip>Removing Shiny Objects</h1>
             
       
 
@@ -77,17 +77,20 @@
 
     
     
-<p>In larger shiny applications, modules are beneficial to reduce the
-application down into smaller, reusable chunks. There are situations
-where these modules can be dynamically added to the application, but
-also want to be removed. By using <code>removeUI</code>, we can remove
-the HTML of the module, however there are still a load of server-side
-processes that will be running even with the module “removed”.
-{shiny.destroy} makes sure that any trace of the module is no longer
-available within the application.</p>
+<p>As shiny applications become larger and more complex, there are
+requirements to dynamically show inputs, results and even entire
+modules. Functionality exists to be able to dynamically update the UI
+and server, however when removing the UI, traces of the input are still
+available throughout the application which may cause some unexpected
+behaviour. The aim of {shiny.destroy} is to eliminate all traces of the
+removed UI in the shiny application, providing the assurance that only
+the required observers and outputs are rendered after removal.</p>
 <div class="section level2">
-<h2 id="ui">UI<a class="anchor" aria-label="anchor" href="#ui"></a>
+<h2 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
 </h2>
+<p>The front-end part of shiny inputs can easily be removed by using the
+<code>removeUI</code> function, however this does not impact the server
+side, where the input is still accessible.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span></span>
@@ -104,6 +107,23 @@ available within the application.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="introduction_clips/removeUI.gif" alt="Shiny application removing the numeric input with removeUI"><div class="figcaption">Shiny application removing the numeric input
+with removeUI</div>
+</div>
+<p>With <code>removeInput</code>, both the front and back end remove the
+input, and any observer or output that references the removed input will
+be updated. Whilst the trick of using
+<code>.subset2(input, "impl")$remove(id)</code> is known to remove the
+input, it does not trigger anything. Within the <code>input</code>
+object, the names are all stored within the <code>.namesOrder</code> and
+needs to be removed from here too.</p>
+<p>After the input has been removed, the session needs to be aware that
+the input has been removed, otherwise nothing will be updated. This is
+where the invalidation of the various values is required, referencing
+the names and value dependency environments within the input object.</p>
+<p>With all this resolved, the input is now fully removed from the shiny
+instance.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">shiny.destroy</span><span class="op">)</span></span>
@@ -124,10 +144,120 @@ available within the application.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="introduction_clips/removeInput.gif" alt="Shiny application removing the numeric input with removeInput"><div class="figcaption">Shiny application removing the numeric input
+with removeInput</div>
+</div>
 </div>
 <div class="section level2">
-<h2 id="server">Server<a class="anchor" aria-label="anchor" href="#server"></a>
+<h2 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
 </h2>
+<p>Outputs can be removed in shiny applications by using a combination
+of <code>removeUI</code> and assigning <code>NULL</code> to the relevant
+output ID server-side; <code>removeOutput</code> is a wrapper for both
+operations. When assigning the output <code>NULL</code>, rather than
+removing the output entirely, it instead creates a reactive using
+<code>req(FALSE)</code> so that the output will never be updated.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">shiny.destroy</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/numericInput.html" class="external-link">numericInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"delete"</span>, <span class="st">"Remove output"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span>, height <span class="op">=</span> <span class="st">"200px"</span>, width <span class="op">=</span> <span class="st">"400px"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span>    <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span></span>
+<span>      <span class="va">x</span>, </span>
+<span>      breaks <span class="op">=</span> <span class="va">bins</span>, </span>
+<span>      col <span class="op">=</span> <span class="st">"darkgray"</span>, </span>
+<span>      border <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span>      xlab <span class="op">=</span> <span class="st">"Waiting time to next eruption (in mins)"</span>,</span>
+<span>      main <span class="op">=</span> <span class="st">"Histogram of waiting times"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">delete</span>, <span class="fu"><a href="../reference/removeOutput.html">removeOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="introduction_clips/removeOutput.gif" alt="Shiny application removing the plot output with removeOutput"><div class="figcaption">Shiny application removing the plot output with
+removeOutput</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="module">Module<a class="anchor" aria-label="anchor" href="#module"></a>
+</h2>
+<p>In larger shiny applications, modules are beneficial to reduce the
+application down into smaller, reusable chunks. There are situations
+where these modules can be dynamically added to the application, but
+also want to be removed. By using <code>removeUI</code>, we can remove
+the HTML of the module, however there are still a load of server-side
+processes that will be running even with the module “removed”.
+{shiny.destroy} makes sure that any trace of the module is no longer
+available within the application.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runExample.html" class="external-link">runExample</a></span><span class="op">(</span></span>
+<span>  <span class="st">"01_boxes"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"shiny.destroy"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/example_app.gif" alt="Shiny application adding and removing box modules with destroyModule" width="100%"></p>
+<p>The inputs and outputs are removed in the same way as an individual
+input or output, however additional objects in a module need to be
+addressed to properly destroy the module. <code>observe</code> and
+<code>observeEvent</code> are eager, and execute whenever any of the
+triggers are updated. If you assign an observer to a variable, you can
+see that it too is an R6 object with several methods. To prevent an
+observer from evaluating, you can use the <code>$destroy()</code>
+method.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"update"</span>, <span class="st">"Increase"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"stop"</span>, <span class="st">"Stop increasing"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">p</a></span><span class="op">(</span><span class="st">"Updates:"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">textOutput</a></span><span class="op">(</span><span class="st">"number_out"</span>, inline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">clicks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveVal.html" class="external-link">reactiveVal</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">update_obs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">update</span>, <span class="fu">clicks</span><span class="op">(</span><span class="fu">clicks</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">stop</span>, <span class="va">update_obs</span><span class="op">$</span><span class="fu">destroy</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">number_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="fu">clicks</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="introduction_clips/stopObserver.gif" alt="Shiny application stopping the counter observer increase"><div class="figcaption">Shiny application stopping the counter observer
+increase</div>
+</div>
+<p>When it comes to modules, these triggers can potentially be inputs or
+reactive values that are passed into the module. Removing a module from
+the shiny session won’t disable these observers, so in order for
+<code>destroyModule</code> to remove these observers, the module
+function needs to be passed into
+<code>makeModuleServerDestroyable</code>. This assigns all observers to
+the user session data so that when the module is destroyed, the
+observers can be too.</p>
+<div class="section level3">
+<h3 id="sub-modules">Sub-Modules<a class="anchor" aria-label="anchor" href="#sub-modules"></a>
+</h3>
+<p>Whilst the module code can be updated so that the observers can be
+destroyed with a single click, it is hard to find sub-modules called
+within the module code. Therefore these should be included as arguments
+to the server-side module, using
+<code>makeModuleServerDestroyable</code>, so that these observers will
+be destroyed too.</p>
+</div>
 </div>
   </div>
 

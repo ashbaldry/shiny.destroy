@@ -11,6 +11,7 @@
 <url><loc>/reference/index.html</loc></url>
 <url><loc>/reference/isSpecifiedFunction.html</loc></url>
 <url><loc>/reference/removeInput.html</loc></url>
+<url><loc>/reference/removeOutput.html</loc></url>
 <url><loc>/reference/runDestroyExample.html</loc></url>
 <url><loc>/reference/shiny.destroy-package.html</loc></url>
 </urlset>

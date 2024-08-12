@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/introduction.html">Removing Shiny Modules</a>
+      <a href="articles/introduction.html">Removing Shiny Objects</a>
     </li>
   </ul>
 </li>
@@ -73,10 +73,11 @@
 <!-- badges: start -->
 
 <!-- badges: end -->
-<p>The aim of {shiny.destroy} is to allow dynamic shiny modules to be removed from both the UI and server.</p>
+<p>The aim of {shiny.destroy} is to allow inputs and modules created in a shiny application to be removed without keeping any trace of them within the realm of the shiny application.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>Install the latest version of {shiny.destroy} on GitHub</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ashbaldry/shiny.destroy"</span><span class="op">)</span></span></code></pre></div>
@@ -84,12 +85,23 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
+<p>There are two types of objects that {shiny.destroy} handles: inputs and modules.</p>
+<div class="section level3">
+<h3 id="input">Input<a class="anchor" aria-label="anchor" href="#input"></a>
+</h3>
+<p>Use the function <code>removeInput</code> to remove the desired input. This is a wrapper around <code><a href="https://rdrr.io/pkg/shiny/man/insertUI.html" class="external-link">shiny::removeUI</a></code>, but includes ways to reference the input server-side, and updates any reactives and/or outputs that depend on that input instantly.</p>
+</div>
+<div class="section level3">
+<h3 id="module">Module<a class="anchor" aria-label="anchor" href="#module"></a>
+</h3>
+<p>Prior to the application loading.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <div class="float">
-<img src="/reference/figures/example_app.gif" alt="Example shiny.destroy application"><div class="figcaption">Example shiny.destroy application</div>
+<img src="./reference/figures/example_app.gif" alt="Example shiny.destroy application"><div class="figcaption">Example shiny.destroy application</div>
 </div>
 <p>The code for this example is available in the <a href="/inst/examples-shiny">examples directory</a></p>
 </div>
