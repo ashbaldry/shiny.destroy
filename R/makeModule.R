@@ -155,7 +155,7 @@ assignObserve <- function(fn_call, idx) {
     "Index must be of length one" = length(idx) == 1L
   )
 
-  if (isObserver(fn_call)) {
+  if (isObserver(fn_call) || (isBindEvent(fn_call) && isObserver(rlang::call_args(fn_call)[[1L]]))) {
     assign_val <- str2lang(paste0(".shiny.destroyers[[\"obs_", idx, "\"]]"))
     rlang::call2("<-", assign_val, fn_call)
   } else {
@@ -170,6 +170,10 @@ isModuleServerCall <- function(fn_call) isSpecifiedFunction(fn_call, "moduleServ
 #' Check if call is for `observe` or `observeEvent`
 #' @noRd
 isObserver <- function(fn_call) isSpecifiedFunction(fn_call, c("observe", "observeEvent"))
+
+#' Check if call is for `bindEvent`
+#' @noRd
+isBindEvent <- function(fn_call) isSpecifiedFunction(fn_call, "bindEvent")
 
 #' Check if Function Call is relevant function
 #'

@@ -5,7 +5,8 @@
 #' to the inputs, outputs and observers that are called within
 #' the module.
 #'
-#' @param id The module namespace ID
+#' @param id The module namespace ID. Use `NULL` to destroy the module the call
+#' is being executed in.
 #' @param session The shiny session, by default it is `shiny::getDefaultReactiveDomain()`
 #'
 #' @examplesIf interactive()
