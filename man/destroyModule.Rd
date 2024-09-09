@@ -7,7 +7,8 @@
 destroyModule(id = NULL, session = getDefaultReactiveDomain())
 }
 \arguments{
-\item{id}{The module namespace ID}
+\item{id}{The module namespace ID. Use `NULL` to destroy the module the call
+is being executed in.}
 
 \item{session}{The shiny session, by default it is `shiny::getDefaultReactiveDomain()`}
 }

@@ -68,3 +68,18 @@ test_that("Observers are assigned to userData when server function passed to mak
   expect_type(destroyableModuleServer, "closure")
   expect_match(as.character(body(destroyableModuleServer)), ".shiny.destroy", all = FALSE)
 })
+
+test_that("bindEvent observers are assigned to the .shiny.destroy list", {
+  basicModuleServer <- function(id) {
+    moduleServer(id, function(input, output, session) {
+      rv <- reactiveVal(0L)
+      observe(rv(rv() + 1L)) |> bindEvent(input$click)
+      rv
+    })
+  }
+
+  destroyableModuleServer <- makeModuleServerDestroyable(basicModuleServer)
+
+  expect_type(destroyableModuleServer, "closure")
+  expect_match(as.character(body(destroyableModuleServer)), ".shiny.destroyers\\[\\[\"obs_\\d\"\\]\\]", all = FALSE)
+})
