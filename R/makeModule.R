@@ -181,7 +181,7 @@ isBindEvent <- function(fn_call) isSpecifiedFunction(fn_call, "bindEvent")
 #' A short description...
 #'
 #' @param fn_call A function call
-#' @param fns A character vector of functions to comapre the function call against
+#' @param fns A character vector of functions to compare the function call against
 #'
 #' @return
 #' A logical value stating whether or not the function call is in the collection.

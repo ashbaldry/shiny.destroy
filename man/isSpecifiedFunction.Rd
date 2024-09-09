@@ -9,7 +9,7 @@ isSpecifiedFunction(fn_call, fns)
 \arguments{
 \item{fn_call}{A function call}
 
-\item{fns}{A character vector of functions to comapre the function call against}
+\item{fns}{A character vector of functions to compare the function call against}
 }
 \value{
 A logical value stating whether or not the function call is in the collection.

@@ -1,4 +1,4 @@
-# shiny.destory
+# shiny.destroy
 
 <!-- badges: start -->
   
