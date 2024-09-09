@@ -38,7 +38,7 @@ test_that("HTML wrapper added to shiny tag list module", {
 #### Server ####
 test_that("Server enabler errors when the module_fn is not a function call", {
   expect_error(
-    makeModuleServerDestroyable(mean(1:10)),
+    makeModuleServerDestroyable(mean(1L:10L)),
     "`module_fn` is not a function"
   )
 })

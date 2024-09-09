@@ -1,6 +1,6 @@
 test_that("Output is fully removed from shiny application", {
   ui <- fluidPage(
-    numericInput("number", "Choose a number", 5, 1, 10),
+    numericInput("number", "Choose a number", 5L, 1L, 10L),
     actionButton("destroy", "Destroy input"),
     textOutput("number_input")
   )

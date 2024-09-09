@@ -93,7 +93,7 @@ test_that("Input is not passed to module after module is destroyed", {
 test_that("Input within a module is reset after module is destroyed", {
   basicModuleUI <- function(id) {
     ns <- NS(id)
-    numericInput(ns("number"), "Choose a number", 5, 1, 10)
+    numericInput(ns("number"), "Choose a number", 5L, 1L, 10L)
   }
 
   basicModuleServer <- function(id) {

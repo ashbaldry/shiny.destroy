@@ -25,14 +25,14 @@ The front-end part of shiny inputs can easily be removed by using the `removeUI`
 library(shiny)
 
 ui <- fluidPage(
-  numericInput("number", "Select number:", 5, 1, 10),
+  numericInput("number", "Select number:", 5L, 1L, 10L),
   actionButton("delete", "Remove input"),
   p("Selected number:", textOutput("number_out", inline = TRUE))
 )
 
 server <- function(input, output, session) {
   output$number_out <- renderText(input$number)
-  
+
   observeEvent(input$delete, removeUI("#number"))
 }
 
@@ -52,16 +52,16 @@ library(shiny)
 library(shiny.destroy)
 
 ui <- fluidPage(
-  numericInput("number", "Select number:", 5, 1, 10),
+  numericInput("number", "Select number:", 5L, 1L, 10L),
   actionButton("delete", "Remove input"),
   p("Selected number:", textOutput("number_out", inline = TRUE))
 )
 
 server <- function(input, output, session) {
   output$number_out <- renderText(input$number %||% "input unavailable")
-  
+
   observeEvent(
-    input$delete, 
+    input$delete,
     removeInput("number", selector = ":has(> #number)")
   )
 }
@@ -80,25 +80,25 @@ library(shiny)
 library(shiny.destroy)
 
 ui <- fluidPage(
-  numericInput("bins", "Number of bins:", min = 1, max = 50, value = 30),
+  numericInput("bins", "Number of bins:", min = 1L, max = 50L, value = 30L),
   actionButton("delete", "Remove output"),
   plotOutput("distPlot", height = "200px", width = "400px")
 )
 
 server <- function(input, output, session) {
   output$distPlot <- renderPlot({
-    x <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    x <- faithful[, 2L]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1L)
     hist(
-      x, 
-      breaks = bins, 
-      col = "darkgray", 
+      x,
+      breaks = bins,
+      col = "darkgray",
       border = "white",
       xlab = "Waiting time to next eruption (in mins)",
       main = "Histogram of waiting times"
     )
   })
-  
+
   observeEvent(input$delete, removeOutput("distPlot"))
 }
 
@@ -132,12 +132,12 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  clicks <- reactiveVal(0)
-  
-  update_obs <- observeEvent(input$update, clicks(clicks() + 1))
-  
+  clicks <- reactiveVal(0L)
+
+  update_obs <- observeEvent(input$update, clicks(clicks() + 1L))
+
   observeEvent(input$stop, update_obs$destroy())
-  
+
   output$number_out <- renderText(clicks())
 }
 
