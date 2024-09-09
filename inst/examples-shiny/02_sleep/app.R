@@ -84,7 +84,7 @@ ui <- bslib::page_fluid(
   bslib::layout_columns(
     comparisonModuleUI("shiny", "Shiny modules"),
     comparisonModuleUI("shiny_destroy", "Destroyable modules"),
-    fill = FALSE
+    fillable = FALSE
   )
 )
 
