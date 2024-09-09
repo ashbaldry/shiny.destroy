@@ -3,3 +3,5 @@
 _\.new\.png$
 ^\.github$
 ^dev$
+^CRAN-SUBMISSION$
+^cran-comments\.md$
