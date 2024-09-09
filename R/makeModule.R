@@ -131,7 +131,9 @@ addDestroyers <- function(module) {
 }
 
 INITIAL_DESTROYERS <- list(
-  quote(if (!".shiny.destroy" %in% names(session$userData)) { session$userData$.shiny.destroy <- list() }),
+  quote(if (!".shiny.destroy" %in% names(session$userData)) {
+    session$userData$.shiny.destroy <- list()
+  }),
   quote(.shiny.destroyers <- list())
 )
 

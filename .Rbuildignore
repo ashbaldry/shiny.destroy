@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 _\.new\.png$
 ^\.github$
+^\.lintr$
 ^dev$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$

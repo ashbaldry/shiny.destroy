@@ -1,0 +1,16 @@
+linters: all_linters(
+    extraction_operator_linter = NULL,
+    library_call_linter = NULL,
+    line_length_linter = line_length_linter(120L),
+    object_name_linter = NULL,
+    undesirable_function_linter = undesirable_function_linter(
+      modify_defaults(
+        default_undesirable_functions,
+        library = NULL
+      )
+    )
+    )
+exclusions: list(
+    "inst/examples-shiny",
+    "tests/testthat.R"
+  )
