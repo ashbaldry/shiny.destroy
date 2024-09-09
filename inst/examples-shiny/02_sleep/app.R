@@ -12,10 +12,16 @@ boxModuleUI <- function(id) {
   )
 }
 
-boxModuleServer <- function(id, create_card) {
+boxModuleServer <- function(id, create_card, destroyable = FALSE) {
   moduleServer(id, function(input, output, session) {
     observeEvent(create_card(), Sys.sleep(1L))
-    observeEvent(input$destroy, destroyModule())
+    observeEvent(input$destroy, {
+      if (destroyable) {
+        destroyModule()
+      } else {
+        removeUI(paste0("#", session$ns("card")))
+      }
+    })
   })
 }
 
@@ -30,6 +36,7 @@ comparisonModuleUI <- function(id, title) {
     bslib::layout_columns(
       div(
         p("Number of boxes:", textOutput(ns("n_modules"), inline = TRUE)),
+        p("Time taken to create last box:", textOutput(ns("time_elapsed"), inline = TRUE)),
         actionButton(ns("create"), "Create new module")
       ),
       div(
@@ -54,7 +61,7 @@ comparisonModuleServer <- function(id, destroyable = FALSE) {
       ns_id <- paste0("card_", card_id())
       cards_id <- ns("cards")
       insertUI(paste0("#", cards_id), "beforeEnd", module_ui_fn(id = ns(ns_id)))
-      module_server_fn(id = ns_id, create_card = reactive(input$create))
+      module_server_fn(id = ns_id, create_card = reactive(input$create), destroyable = destroyable)
 
       card_id(card_id() + 1L)
     })
@@ -67,6 +74,15 @@ comparisonModuleServer <- function(id, destroyable = FALSE) {
       inputs <- vapply(names(input), \(x) paste0(x, ": ", input[[x]]), character(1L))
       cat(inputs, sep = "\n")
     })
+
+    time_init <- reactiveVal(NULL)
+    time_end <- reactiveVal(NULL)
+
+    observeEvent(input$create, priority = 1L, time_init(Sys.time()))
+    observeEvent(input$create, priority = -1L, time_end(Sys.time()))
+
+    output$time_elapsed <- renderText(paste0(round(time_end() - time_init()), "s")) |>
+      bindEvent(time_end())
   })
 }
 
