@@ -1,6 +1,4 @@
-linters: all_linters(
-    extraction_operator_linter = NULL,
-    library_call_linter = NULL,
+linters: linters_with_defaults(
     line_length_linter = line_length_linter(120L),
     object_name_linter = NULL,
     undesirable_function_linter = undesirable_function_linter(
