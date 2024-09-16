@@ -2,6 +2,7 @@ CMD
 Destroyable
 UI
 destroyable
+fn
 getDefaultReactiveDomain
 moduleServer
 numericInput
@@ -11,3 +12,4 @@ removeOutput
 removeUI
 runExample
 tagList
+userData
