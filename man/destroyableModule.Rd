@@ -16,6 +16,19 @@ makeModuleServerDestroyable(module_fn)
 will be wrapped by an HTML tag so that a shiny.destroy attribute
 can be attached}
 }
+\value{
+An updated function call of `module_fn`.
+
+For the UI, if the returned object from `module_fn` is a `shiny.tag`
+then an additional attribute will be added to the top-level HTML tag
+for \{shiny.destroy\} to reference when removing the UI. If the returned
+object is a `shiny.tag.list` then a wrapper tag will surround the module
+with the attribute to destroy the module.
+
+For the server, each observer will be assigned to the `.shiny.destroy`
+list within `session$userData`. The returned object from the module
+remains the same as before.
+}
 \description{
 Adding wrappers to a shiny module to enable an ease of dynamically
 adding and removing modules within a shiny application.

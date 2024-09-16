@@ -12,6 +12,10 @@ is being executed in.}
 
 \item{session}{The shiny session, by default it is `shiny::getDefaultReactiveDomain()`}
 }
+\value{
+No return value, called to remove the relevant module UI and server-side
+observers.
+}
 \description{
 Given the namespace of a shiny module, remove all references
 to the inputs, outputs and observers that are called within

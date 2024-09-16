@@ -4,9 +4,9 @@
 \name{shiny.destroy-package}
 \alias{shiny.destroy}
 \alias{shiny.destroy-package}
-\title{shiny.destroy: Create destroyable modules in 'Shiny'}
+\title{shiny.destroy: Create Destroyable Modules in 'Shiny'}
 \description{
-A way to fully remove dynamic 'Shiny' modules from a session.
+This package enables the complete removal of various 'Shiny' components, such as inputs, outputs and modules. It also aids in the removal of observers that have been created in dynmically created modules.
 }
 \author{
 \strong{Maintainer}: Ashley Baldry \email{arbaldry91@gmail.com}
