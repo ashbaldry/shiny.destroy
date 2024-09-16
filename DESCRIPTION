@@ -3,7 +3,7 @@ Type: Package
 Title: Create Destroyable Modules in 'Shiny'
 Version: 0.1.0
 Authors@R: person("Ashley", "Baldry", email = "arbaldry91@gmail.com", role = c("aut", "cre"))
-Description: This package enables the complete removal of various 'Shiny' components, such
+Description: Enables the complete removal of various 'Shiny' components, such
     as inputs, outputs and modules. It also aids in the removal of observers that have been 
     created in dynamically created modules.
 License: MIT + file LICENSE
