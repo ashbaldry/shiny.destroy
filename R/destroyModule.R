@@ -9,6 +9,10 @@
 #' is being executed in.
 #' @param session The shiny session, by default it is `shiny::getDefaultReactiveDomain()`
 #'
+#' @return
+#' No return value, called to remove the relevant module UI and server-side
+#' observers.
+#'
 #' @examplesIf interactive()
 #' library(shiny)
 #'
