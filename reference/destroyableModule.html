@@ -78,6 +78,18 @@ will be wrapped by an HTML tag so that a shiny.destroy attribute
 can be attached</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    <p>An updated function call of `module_fn`.</p>
+<p>For the UI, if the returned object from `module_fn` is a `shiny.tag`
+then an additional attribute will be added to the top-level HTML tag
+for {shiny.destroy} to reference when removing the UI. If the returned
+object is a `shiny.tag.list` then a wrapper tag will surround the module
+with the attribute to destroy the module.</p>
+<p>For the server, each observer will be assigned to the `.shiny.destroy`
+list within `session$userData`. The returned object from the module
+remains the same as before.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
