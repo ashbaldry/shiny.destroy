@@ -26,11 +26,11 @@ The following examples are available:
 \item{01_boxes}{A simple application where the "create" button will
 load a simple box with a "destroy" button. This highlights the full
 removal of the module when the button is pressed.}
-}
 \item{02_sleep}{An application that has 2 side by side modules, one
 using \{shiny\} to remove the UI and the other using \{shiny.destroy\}
 to fully remove the boxes to display the incremental time gain from
 removing the long-running observers.}
+}
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
