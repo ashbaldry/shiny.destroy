@@ -1,4 +1,6 @@
 test_that("Input within a sub-module cannot be accessed after module is destroyed", {
+  testthat::skip_on_cran()
+
   basicSubModuleUI <- function(id) {
     ns <- NS(id)
     actionButton(ns("click"), "Click Button")

@@ -1,4 +1,6 @@
 test_that("01_boxes application works as expected", {
+  testthat::skip_on_cran()
+
   example_dir <- system.file("examples-shiny", "01_boxes", package = "shiny.destroy")
   app <- shinytest2::AppDriver$new(example_dir, name = "example_app")
   on.exit(app$stop())

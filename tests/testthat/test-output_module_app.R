@@ -1,4 +1,6 @@
 test_that("Input within a module cannot be accessed after module is destroyed", {
+  testthat::skip_on_cran()
+
   basicModuleServer <- function(id, text_input) {
     moduleServer(id, function(input, output, session) {
       output$text <- renderText({
