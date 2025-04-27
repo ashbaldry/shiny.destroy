@@ -1,4 +1,6 @@
 test_that("Input within a module cannot be accessed after module is destroyed", {
+  testthat::skip_on_cran()
+
   basicModuleUI <- function(id) {
     ns <- NS(id)
     actionButton(ns("click"), "Click Button")
@@ -48,6 +50,7 @@ test_that("Input within a module cannot be accessed after module is destroyed", 
 })
 
 test_that("Input is not passed to module after module is destroyed", {
+  testthat::skip_on_cran()
   basicModuleServer <- function(id, click) {
     moduleServer(id, function(input, output, session) {
       rv <- reactiveVal(0L)
@@ -91,6 +94,8 @@ test_that("Input is not passed to module after module is destroyed", {
 })
 
 test_that("Input within a module is reset after module is destroyed", {
+  testthat::skip_on_cran()
+
   basicModuleUI <- function(id) {
     ns <- NS(id)
     numericInput(ns("number"), "Choose a number", 5L, 1L, 10L)
