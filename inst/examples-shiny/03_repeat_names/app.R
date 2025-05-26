@@ -41,22 +41,32 @@ destroyableNumericModuleServer <- makeModuleServerDestroyable(numericModuleServe
 
 ui <- bslib::page_fluid(
   h1("Destroyable Filters"),
-  span(
-    selectInput("column", "Select Column", head(names(iris), -1L)),
-    actionButton("create", "Create new filter")
-  ),
   bslib::layout_columns(
-    div(id = "filters"),
+    div(
+      span(
+        selectInput("column", "Select Column", head(names(iris), -1L)),
+        actionButton("create", "Create new filter")
+      ),
+      div(id = "filters")
+    ),
     div(
       h2("Iris"),
-      DT::DTOutput("iris")
+      DT::DTOutput("iris"),
+      h3(class = "pt-3", "Update Filter"),
+      div(
+        class = "d-flex justify-content-around align-items-center",
+        selectInput("column_filter", "Select Column", NULL),
+        numericInput("value", "Maximum Value", value = NULL, step = 0.1),
+        actionButton("update", "Update Filter")
+      )
     ),
     col_widths = c(4, 8)
   )
 )
 
 server <- function(input, output, session) {
-  session$userData$col_choices <- reactiveVal(head(names(iris), -1L))
+  iris_columns <- head(names(iris), -1L)
+  session$userData$col_choices <- reactiveVal(iris_columns)
   session$userData$filters <- reactiveValues()
 
   observeEvent(input$create, {
@@ -67,6 +77,22 @@ server <- function(input, output, session) {
 
   observeEvent(session$userData$col_choices(), {
     updateSelectInput(inputId = "column", choices = session$userData$col_choices())
+    updateSelectInput(
+      inputId = "column_filter",
+      choices = setdiff(iris_columns, session$userData$col_choices())
+    )
+  })
+
+  observeEvent(input$update, {
+    req(input$column_filter)
+    input_id <- paste0(input$column_filter, "-slider")
+    req(input$value >= input[[input_id]][1])
+
+    updateSliderInput(
+      session = session,
+      input = input_id,
+      value = c(input[[input_id]][1], input$value)
+    )
   })
 
   iris_filtered <- reactive({
