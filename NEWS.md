@@ -1,5 +1,7 @@
-# shiny.destroy
+#shiny.destroy 0.1.1
 
-## 0.1.0
+- Added example to show repeat HTML IDs being used (#18)
 
-Initial release of package
+# shiny.destroy 0.1.0
+
+- Initial release of package
